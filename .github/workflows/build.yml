@@ -1,0 +1,29 @@
+name: build-ipa
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Build (unsigned)
+        run: |
+          xcodebuild -project RangingProbe.xcodeproj -target RangingProbe \
+            -configuration Release -sdk iphoneos \
+            SYMROOT="$PWD/build" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+      - name: Package .ipa
+        run: |
+          mkdir -p Payload
+          cp -R build/Release-iphoneos/RangingProbe.app Payload/
+          zip -qr RangingProbe.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RangingProbe-ipa
+          path: RangingProbe.ipa

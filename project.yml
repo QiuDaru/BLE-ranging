@@ -1,0 +1,29 @@
+name: RangingProbe
+options:
+  bundleIdPrefix: tw.daru
+  deploymentTarget:
+    iOS: "16.0"
+targets:
+  RangingProbe:
+    type: application
+    platform: iOS
+    sources: [RangingProbe]
+    info:
+      path: RangingProbe/Info.plist
+      properties:
+        CFBundleDisplayName: RangingProbe
+        CFBundleShortVersionString: "0.1"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSLocationWhenInUseUsageDescription: "實驗用：偵測會議室的 Beacon 訊號"
+        NSLocationAlwaysAndWhenInUseUsageDescription: "實驗用：鎖定畫面時持續偵測 Beacon 訊號"
+        UIBackgroundModes: [location]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: tw.daru.rangingprobe
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_VERSION: "5.0"
+        CODE_SIGNING_ALLOWED: "NO"
+        CODE_SIGNING_REQUIRED: "NO"
+        CODE_SIGN_IDENTITY: ""
