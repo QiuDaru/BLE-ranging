@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - name: Show environment
+        run: |
+          xcodebuild -version
+          xcodebuild -showsdks
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Generate Xcode project
