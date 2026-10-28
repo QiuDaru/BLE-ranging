@@ -2,7 +2,8 @@
 Windows 筆電當主持人：廣播 iBeacon，每 30 秒輪替一次 Major/Minor（nonce）。
 
 需求：Windows 10 以上、支援 BLE peripheral 角色的藍牙晶片、Python 3.9+
-安裝：pip install winsdk
+安裝（Python 3.13）：
+  python -m pip install winrt-runtime winrt-Windows.Foundation winrt-Windows.Foundation.Collections winrt-Windows.Devices.Bluetooth winrt-Windows.Devices.Bluetooth.Advertisement winrt-Windows.Storage.Streams
 執行：python beacon_broadcaster.py
 進出測試（C6）：在視窗輸入 l 按 Enter 標記「離開」，輸入 r 按 Enter 標記「回來」
 """
@@ -17,12 +18,20 @@ import time
 import uuid
 from datetime import datetime, timezone
 
-from winsdk.windows.devices.bluetooth import BluetoothAdapter
-from winsdk.windows.devices.bluetooth.advertisement import (
-    BluetoothLEAdvertisementPublisher,
-    BluetoothLEManufacturerData,
-)
-from winsdk.windows.storage.streams import DataWriter
+try:  # 新版 pywinrt（支援 Python 3.13）
+    from winrt.windows.devices.bluetooth import BluetoothAdapter
+    from winrt.windows.devices.bluetooth.advertisement import (
+        BluetoothLEAdvertisementPublisher,
+        BluetoothLEManufacturerData,
+    )
+    from winrt.windows.storage.streams import DataWriter
+except ImportError:  # 舊版 winsdk（Python 3.12 以下）
+    from winsdk.windows.devices.bluetooth import BluetoothAdapter
+    from winsdk.windows.devices.bluetooth.advertisement import (
+        BluetoothLEAdvertisementPublisher,
+        BluetoothLEManufacturerData,
+    )
+    from winsdk.windows.storage.streams import DataWriter
 
 BEACON_UUID = uuid.UUID("8F3B1C2A-6D4E-4F7A-9B2C-3E1D5A7F9C10")  # 必須和 App 相同
 WINDOW_SEC = 30
